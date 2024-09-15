@@ -36,12 +36,12 @@
 #define DGE_APPLICATION
 #include "defGameEngine.hpp"
 
-class Engine3D : public def::GameEngine
+class Example : public def::GameEngine
 {
 public:
-	Engine3D()
+	Example()
 	{
-		SetTitle("Math library");
+		SetTitle("Example");
 	}
 
 	def::circle<float> c;
@@ -93,10 +93,10 @@ protected:
 
 int main()
 {
-	Engine3D demo;
+	Example demo;
 
-	demo.Construct(1024, 960, 1, 1);
-	demo.Run();
+	if (demo.Construct(1024, 960, 1, 1))
+		demo.Run();
 
 	return 0;
 }
