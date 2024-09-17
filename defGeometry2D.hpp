@@ -34,6 +34,8 @@
 #include <cmath>
 #include <algorithm>
 
+#define DGE_IGNORE_VEC2D
+
 namespace def
 {
 	constexpr double epsilon = 0.01;
@@ -110,7 +112,7 @@ namespace def
 		constexpr T circumference() const;
 
 		vec2d<T> pos;
-		float radius;
+		float radius = 0.0f;
 	};
 
 	template <class T>
@@ -122,7 +124,7 @@ namespace def
 		constexpr vec2d<T> vector() const;
 
 		template <class T1>
-		constexpr T dist(vec2d<T1> v) const;
+		constexpr T dist(const vec2d<T1>& v) const;
 
 		vec2d<T> start, end;
 	};
@@ -229,6 +231,10 @@ namespace def
 	// Checks if c intersects l
 	template <class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const line<T2>& l);
+
+	// Checks if c intersects r
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r);
 
 #ifdef DEF_GEOMETRY2D_IMPL
 #undef DEF_GEOMETRY2D_IMPL
@@ -888,11 +894,13 @@ namespace def
 	template<class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const line<T2>& l)
 	{
-		auto distToCenter = l.dist(c.pos);
+		auto dist = l.dist(c.pos);
 
-		// No intersection at all
-		if (distToCenter > c.radius + epsilon)
+		if (utils::equal(dist, c.radius))
+		{
+			// No intersection at all
 			return {};
+		}
 
 		// Compute point closest to the circle on the line
 		auto d = l.vector();
@@ -908,8 +916,8 @@ namespace def
 
 		// Circle intersects the line
 		auto length = sqrt(c.radius * c.radius - distToLine);
-		auto p1 = closestPointToLine + l.vector().norm() * length;
-		auto p2 = closestPointToLine - l.vector().norm() * length;
+		auto p1 = closestPointToLine + d.norm() * length;
+		auto p2 = closestPointToLine - d.norm() * length;
 
 		std::vector<vec2d<T2>> intersections;
 		
@@ -919,16 +927,30 @@ namespace def
 		return intersections;
 	}
 
+	template<class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r)
+	{
+		std::vector<vec2d<T2>> intersections;
+
+		for (size_t i = 0; i < rect::SIDES; i++)
+		{
+			for (const auto& p : intersects(c, r.side(i)))
+				intersections.push_back(p);
+		}
+
+		return intersections;
+	}
+
 	template<class T>
 	template<class T1>
-	constexpr T line<T>::dist(vec2d<T1> v) const
+	constexpr T line<T>::dist(const vec2d<T1>& v) const
 	{
 		auto a = start.y - end.y;
 		auto b = end.x - start.x;
 		auto c = start.x * end.y - end.x * start.y;
 
 		if (a == 0 && b == 0)
-			return start.dist(v);
+			return dist(v);
 
 		return abs(a * v.x + b * v.y + c) / sqrt(a * a + b * b);
 	}
