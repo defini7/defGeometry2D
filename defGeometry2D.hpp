@@ -29,17 +29,55 @@
 ***/
 #pragma endregion
 
+#pragma region Documentation
+/***
+* - Constants
+*     - EPSILON - is used for comparing floating point values
+*     - PI - is just the Pi number stolen from the Internet (just kidding... I calculated it myself)
+* - Functions
+*     - utils::equal - checks if difference between 2 values is less than or equals to the EPSILON constant
+*                      (values must have *-* and *<=* operators implemented)
+* - Structs
+*     - vec2d<T> - a struct for storing *x* and *y* components of type T
+*         - Methods:
+*             - vec2d::clamp - clamps each component to the *start* and *end*
+*             - vec2d::lerp - lineally interpolates each component between *start* and *end*
+*             - vec2d::dist - calculates distance between *this* and *v* points
+*             - vec2d::dot - calculates dot product of *this* and *v* vectors
+*             - vec2d::cross - calculates cross product of *this* and *v* vectors
+*             - vec2d::angle - calculates angle between *this* and *v* using dot product
+*             - vec2d::length - calculates a length of the vector
+*             - vec2d::mag - calculates a length of the vector
+*             - vec2d::mag2 - calculates a square root out of the vec2d::mag value
+*             - vec2d::man - calculates Manhattan distance between *this* and *v* points
+*             - vec2d::max - performs std::max function on each component of *this* with the *v* components
+*             - vec2d::min - performs std::min function on each component of *this* with the *v* components
+*             - vec2d::swap - swaps components of *this* and *v* vectors
+*             - vec2d::norm - returns *v* / *v.length()*
+*             - vec2d::abs - performs std::abs on each component of the vector
+*             - vec2d::perp - returns a perpendicular vector to the *this* vector
+*             - vec2d::floor - performs std::floor on each component of the vector
+*             - vec2d::ceil - performs std::ceil on each component of the vector
+*             - vec2d::round - performs std::round on each component of the vector
+*             - vec2d::cart - treats *x* as a radius and *y* as an angle and returns a vector where *x* and *y* are points in the cartesian space
+*             - vec2d::polar - returns a vector where "x" component is a length of the *this* vector and "y" is the angle between (length, 0) and (x, y) points
+*             - vec2d::str - returns *x* and *y* components as a string: "(x, y)"
+***/
+#pragma endregion
+
 #include <vector>
 #include <string>
 #include <cmath>
 #include <algorithm>
 
+#ifndef DGE_IGNORE_VEC2D
 #define DGE_IGNORE_VEC2D
+#endif
 
 namespace def
 {
-	constexpr double epsilon = 0.01;
-	constexpr double pi = 3.141592653589793;
+	constexpr double EPSILON = 0.01;
+	constexpr double PI = 3.141592653589793;
 
 	namespace utils
 	{
@@ -53,6 +91,7 @@ namespace def
 		static_assert(std::is_arithmetic<T>::value, "def::vec2d<T> must be numeric");
 
 		constexpr vec2d() = default;
+		constexpr vec2d(const T& xy);
 		constexpr vec2d(const T& x, const T& y);
 
 		constexpr vec2d(const vec2d&) = default;
@@ -106,7 +145,7 @@ namespace def
 	struct circle
 	{
 		constexpr circle() = default;
-		constexpr circle(const vec2d<T>& p, float r);
+		constexpr circle(const vec2d<T>& pos, float radius);
 
 		constexpr T area() const;
 		constexpr T circumference() const;
@@ -119,7 +158,7 @@ namespace def
 	struct line
 	{
 		constexpr line() = default;
-		constexpr line(const vec2d<T>& s, const vec2d<T>& e);
+		constexpr line(const vec2d<T>& start, const vec2d<T>& end);
 
 		constexpr vec2d<T> vector() const;
 
@@ -133,7 +172,7 @@ namespace def
 	struct rect
 	{
 		constexpr rect() = default;
-		constexpr rect(const vec2d<T>& p, const vec2d<T>& s);
+		constexpr rect(const vec2d<T>& pos, const vec2d<T>& size);
 
 		enum side : uint32_t
 		{
@@ -151,14 +190,46 @@ namespace def
 		constexpr line<T> right() const;
 		constexpr line<T> bottom() const;
 
+		constexpr vec2d<T> top_left() const;
+		constexpr vec2d<T> top_right() const;
+		constexpr vec2d<T> bottom_left() const;
+		constexpr vec2d<T> bottom_right() const;
+
 		constexpr line<T> side(uint32_t i) const;
-		constexpr vec2d<T> end() const;
 
 		vec2d<T> pos;
 		vec2d<T> size;
 
 		static constexpr uint32_t SIDES = 4;
 	};
+
+	// point contains point
+	// rectangle contains point
+	// rectangle contains rectangle
+	// rectangle contains line
+	// rectangle contains circle
+	// line contains point
+	// line contains line
+	// circle contains point
+	// circle contains circle
+	// circle contains line
+	// circle contains rectangle
+	// point intersects point
+	// point intersects circle
+	// point intersects rectangle
+	// point intersects line
+	// rectangle intersects point
+	// rectangle intersects line
+	// rectangle intersects rectangle
+	// rectangle intersects circle
+	// line intersects point
+	// line intersects line
+	// line intersects rectangle
+	// line intersects circle
+	// circle intersects point
+	// circle intersects line
+	// circle intersects rectangle
+	// circle intersects circle
 
 	// Checks if p1 and p2 have the same coordinates
 	template <class T1, class T2>
@@ -176,6 +247,10 @@ namespace def
 	template <class T1, class T2>
 	constexpr bool contains(const rect<T1>& r, const line<T2>& l);
 
+	// Checks if r contains с
+	template <class T1, class T2>
+	constexpr bool contains(const rect<T1>& r, const circle<T2>& c);
+
 	// Checks if l1 contains l2
 	template <class T1, class T2>
 	constexpr bool contains(const line<T1>& l1, const line<T2>& l2);
@@ -184,23 +259,39 @@ namespace def
 	template <class T1, class T2>
 	constexpr bool contains(const line<T1>& l, const vec2d<T2>& p);
 
-	// Checks if p is inside c
+	// Checks if c contains p
 	template <class T1, class T2>
 	constexpr bool contains(const circle<T1>& c, const vec2d<T2>& p);
-
-	// Checks if c1 contains c2
-	template <class T1, class T2>
-	constexpr bool contains(const circle<T1>& c1, const circle<T2>& c2);
 
 	// Checks if c contains l
 	template <class T1, class T2>
 	constexpr bool contains(const circle<T1>& c, const line<T2>& l);
 
+	// Checks if c contains r
+	template <class T1, class T2>
+	constexpr bool contains(const circle<T1>& c, const rect<T2>& r);
+
+	// Checks if c1 contains c2
+	template <class T1, class T2>
+	constexpr bool contains(const circle<T1>& c1, const circle<T2>& c2);
+
 	// Checks if p1 and p2 have the same coordinates
 	template <class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p1, const vec2d<T2>& p2);
 
-	// Checks if p intersects c
+	// Checks if p intersects l
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const line<T2>& l);
+
+	// Checks if p intersects r
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r);
+
+	// Checks if p intersects circle
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const circle<T2>& c);
+
+	// Checks if c intersects p
 	template <class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const vec2d<T2>& p);
 
@@ -212,9 +303,21 @@ namespace def
 	template <class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2);
 
+	// Checks if r intersects c
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c);
+
 	// Checks if l1 intersects l2
 	template <class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l1, const line<T2>& l2);
+
+	// Checks if l intersects r
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r);
+
+	// Checks if l intersects c
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const circle<T2>& c);
 
 	// Checks if r intersects l
 	template <class T1, class T2>
@@ -239,12 +342,11 @@ namespace def
 #ifdef DEF_GEOMETRY2D_IMPL
 #undef DEF_GEOMETRY2D_IMPL
 
+	template<typename T>
+	constexpr vec2d<T>::vec2d(const T& xy) : x(xy), y(xy) {}
+
 	template <class T>
-	constexpr vec2d<T>::vec2d(const T& x, const T& y)
-	{
-		this->x = x;
-		this->y = y;
-	}
+	constexpr vec2d<T>::vec2d(const T& x, const T& y) : x(x), y(y) {}
 
 	template <class T1, class T2>
 	constexpr vec2d<T1>& operator+=(vec2d<T1>& v1, const vec2d<T2>& v2)
@@ -589,7 +691,7 @@ namespace def
 	template <class T1, class T2>
 	constexpr auto utils::equal(T1 lhs, T2 rhs)
 	{
-		return abs(lhs - rhs) <= epsilon;
+		return abs(lhs - rhs) <= EPSILON;
 	}
 
 	template <class T>
@@ -626,13 +728,37 @@ namespace def
 	template <class T>
 	constexpr line<T> rect<T>::right() const
 	{
-		return { { pos.x + size.x, pos.y }, end() };
+		return { { pos.x + size.x, pos.y }, bottom_right() };
 	}
 
 	template <class T>
 	constexpr line<T> rect<T>::bottom() const
 	{
-		return { { pos.x, pos.y + size.y }, end() };
+		return { { pos.x, pos.y + size.y }, bottom_right() };
+	}
+
+	template<class T>
+	constexpr vec2d<T> rect<T>::top_left() const
+	{
+		return pos;
+	}
+
+	template<class T>
+	constexpr vec2d<T> rect<T>::top_right() const
+	{
+		return { pos.x + size.x, pos.y };
+	}
+
+	template<class T>
+	constexpr vec2d<T> rect<T>::bottom_left() const
+	{
+		return { pos.x, pos.y + size.y };;
+	}
+
+	template<class T>
+	constexpr vec2d<T> rect<T>::bottom_right() const
+	{
+		return pos + size;
 	}
 
 	template<class T>
@@ -649,12 +775,6 @@ namespace def
 		return {};
 	}
 
-	template<class T>
-	constexpr vec2d<T> rect<T>::end() const
-	{
-		return pos + size;
-	}
-
 	template <class T>
 	constexpr circle<T>::circle(const vec2d<T>& p, float r)
 	{
@@ -665,13 +785,13 @@ namespace def
 	template <class T>
 	constexpr T circle<T>::area() const
 	{
-		return pi * double(radius * radius);
+		return PI * double(radius * radius);
 	}
 
 	template <class T>
 	constexpr T circle<T>::circumference() const
 	{
-		return 2.0 * pi * (double)radius;
+		return 2.0 * PI * (double)radius;
 	}
 
 	template <class T>
@@ -696,28 +816,35 @@ namespace def
 	template <class T1, class T2>
 	constexpr bool contains(const circle<T1>& c, const vec2d<T2>& p)
 	{
-		auto sqr_r = c.radius * c.radius;
+		auto sqr_radius = c.radius * c.radius;
 		auto sqr_dist = (c.pos - p).mag2();
 
-		return sqr_dist < sqr_r || utils::equal(sqr_dist, sqr_r);
+		return sqr_dist < sqr_radius || utils::equal(sqr_dist, sqr_radius);
 	}
 
 	template <class T1, class T2>
 	constexpr bool contains(const rect<T1>& r, const vec2d<T2>& p)
 	{
-		return p >= r.pos && p <= r.end();
+		return p >= r.pos && p <= r.bottom_right();
 	}
 
 	template <class T1, class T2>
 	constexpr bool contains(const rect<T1>& r1, const rect<T2>& r2)
 	{
-		return r1.pos <= r2.pos && r1.end() >= r2.end();
+		return r1.pos <= r2.pos && r1.bottom_right() >= r2.bottom_right();
 	}
 
 	template <class T1, class T2>
 	constexpr bool contains(const rect<T1>& r, const line<T2>& l)
 	{
-		return l.start >= r.pos && l.end >= r.pos && l.start <= r.end() && l.end <= r.end();
+		return l.start >= r.pos && l.end >= r.pos && l.start <= r.bottom_right() && l.end <= r.bottom_right();
+	}
+
+	template<class T1, class T2>
+	constexpr bool contains(const rect<T1>& r, const circle<T2>& c)
+	{
+		rect<T2> rect_circle(c.pos - c.radius, vec2d<T2>(c.radius * 2));
+		return contains(r, rect_circle);
 	}
 
 	template <class T1, class T2>
@@ -755,12 +882,46 @@ namespace def
 	}
 
 	template<class T1, class T2>
+	constexpr bool contains(const circle<T1>& c, const rect<T2>& r)
+	{
+		auto radius_sqr = c.radius * c.radius;
+
+		auto check_dist = [&](const vec2d<T2>& edge)
+			{
+				auto diff_x = edge.x - c.pos.x;
+				auto diff_y = edge.y - c.pos.y;
+
+				return diff_x * diff_x + diff_y * diff_y <= radius_sqr;
+			};
+
+		return check_dist(r.pos) && check_dist(r.top_right()) && check_dist(r.bottom_left()) && check_dist(r.bottom_right());
+	}
+
+	template<class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p1, const vec2d<T2>& p2)
 	{
 		if (contains(p1, p2))
 			return { p2 };
 
 		return {};
+	}
+
+	template<class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const line<T2>& l)
+	{
+		return intersects(l, p);
+	}
+
+	template<class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r)
+	{
+		return intersects(r, p);
+	}
+
+	template<class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const circle<T2>& c)
+	{
+		return intersects(c, p);
 	}
 
 	template<class T1, class T2>
@@ -806,6 +967,12 @@ namespace def
 	}
 
 	template<class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c)
+	{
+		return intersects(c, r);
+	}
+
+	template<class T1, class T2>
 	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l1, const line<T2>& l2)
 	{
 		// l1: a1 * x + b1 * y = -c1
@@ -834,6 +1001,18 @@ namespace def
 			return { point };
 
 		return {};
+	}
+
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r)
+	{
+		return intersects(r, l);
+	}
+
+	template <class T1, class T2>
+	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const circle<T2>& c)
+	{
+		return intersects(c, l);
 	}
 
 	template<class T1, class T2>
@@ -945,12 +1124,13 @@ namespace def
 	template<class T1>
 	constexpr T line<T>::dist(const vec2d<T1>& v) const
 	{
-		auto a = start.y - end.y;
-		auto b = end.x - start.x;
-		auto c = start.x * end.y - end.x * start.y;
+		auto a = end.y - start.y;
+		auto b = start.x - end.x;
 
 		if (a == 0 && b == 0)
-			return dist(v);
+			return v.dist(start);
+
+		auto c = end.x * start.y - start.x * end.y;
 
 		return abs(a * v.x + b * v.y + c) / sqrt(a * a + b * b);
 	}
