@@ -1111,7 +1111,7 @@ namespace def
 	{
 		std::vector<vec2d<T2>> intersections;
 
-		for (size_t i = 0; i < rect::SIDES; i++)
+		for (size_t i = 0; i < rect<T2>::SIDES; i++)
 		{
 			for (const auto& p : intersects(c, r.side(i)))
 				intersections.push_back(p);
