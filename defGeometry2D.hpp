@@ -41,6 +41,7 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <cstdint>
 
 #ifndef DGE_IGNORE_VEC2D
 #define DGE_IGNORE_VEC2D
