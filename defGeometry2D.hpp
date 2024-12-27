@@ -1,5 +1,5 @@
 #ifndef DEF_GEOMETRY2D_HPP
-#undef DEF_GEOMETRY2D_HPP
+#define DEF_GEOMETRY2D_HPP
 
 #pragma region Documentation
 /***
@@ -58,13 +58,12 @@ namespace def
 		constexpr auto equal(T1 lhs, T2 rhs);
 	}
 
-	template <typename T>
+	template <class T>
 	struct vec2d
 	{
-		static_assert(std::is_arithmetic<T>::value, "def::vec2d<T> must be numeric");
+		static_assert(std::is_arithmetic<T>::value, "vec2d<T> must be numeric");
 
 		constexpr vec2d() = default;
-		constexpr vec2d(const T& xy);
 		constexpr vec2d(const T& x, const T& y);
 
 		constexpr vec2d(const vec2d&) = default;
@@ -101,7 +100,7 @@ namespace def
 		constexpr vec2d cart() const;
 		constexpr vec2d polar() const;
 
-		constexpr std::string str() const;
+		std::string str() const;
 
 		template <class F>
 		constexpr operator vec2d<F>() const
@@ -113,6 +112,99 @@ namespace def
 	typedef vec2d<int> vi2d;
 	typedef vec2d<float> vf2d;
 	typedef vec2d<double> vd2d;
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator+=(vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator-=(vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator*=(vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator/=(vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator%=(vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator+=(vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator-=(vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator*=(vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator/=(vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<T1>& operator%=(vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator%(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const vec2d<T1>& v1, const T2& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const T1& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const T1& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const T1& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const T1& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator%(const T1& v1, const vec2d<T2>& v2);
+
+	template <class T>
+	constexpr vec2d<T> operator-(const vec2d<T>& v);
+
+	template <class T1, class T2>
+	constexpr bool operator==(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr bool operator<=(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr bool operator>=(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr bool operator<(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr bool operator>(const vec2d<T1>& v1, const vec2d<T2>& v2);
+
+	template <class T1, class T2>
+	constexpr bool operator!=(const vec2d<T1>& v1, const vec2d<T2>& v2);
 
 	template <class T>
 	struct circle
@@ -141,19 +233,19 @@ namespace def
 		vec2d<T> start, end;
 	};
 
+	enum side : uint8_t
+	{
+		LEFT,
+		TOP,
+		RIGHT,
+		BOTTOM
+	};
+
 	template <class T>
 	struct rect
 	{
 		constexpr rect() = default;
 		constexpr rect(const vec2d<T>& pos, const vec2d<T>& size);
-
-		enum side : uint32_t
-		{
-			LEFT,
-			TOP,
-			RIGHT,
-			BOTTOM
-		};
 
 		constexpr T area() const;
 		constexpr T perimeter() const;
@@ -173,7 +265,7 @@ namespace def
 		vec2d<T> pos;
 		vec2d<T> size;
 
-		static constexpr uint32_t SIDES = 4;
+		static constexpr uint8_t SIDES = 4;
 	};
 
 	// point contains point
@@ -258,7 +350,7 @@ namespace def
 
 	// Checks if p intersects r
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r);
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r, side* s = nullptr);
 
 	// Checks if p intersects circle
 	template <class T1, class T2>
@@ -270,15 +362,15 @@ namespace def
 
 	// Checks if r intersects p
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p);
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p, side* s = nullptr);
 
 	// Checks if r1 intersects r2
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2);
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<side>* s = nullptr);
 
 	// Checks if r intersects c
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c);
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c, std::vector<side>* s = nullptr);
 
 	// Checks if l1 intersects l2
 	template <class T1, class T2>
@@ -294,7 +386,7 @@ namespace def
 
 	// Checks if r intersects l
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l);
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l, std::vector<side>* s = nullptr);
 
 	// Checks if l intersects p
 	template <class T1, class T2>
@@ -310,16 +402,18 @@ namespace def
 
 	// Checks if c intersects r
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r);
+	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r, std::vector<side>* s = nullptr);
+
+#define DEF_GEOMETRY2D_IMPL
 
 #ifdef DEF_GEOMETRY2D_IMPL
 #undef DEF_GEOMETRY2D_IMPL
 
-	template<typename T>
-	constexpr vec2d<T>::vec2d(const T& xy) : x(xy), y(xy) {}
-
 	template <class T>
-	constexpr vec2d<T>::vec2d(const T& x, const T& y) : x(x), y(y) {}
+	constexpr vec2d<T>::vec2d(const T& x, const T& y) : x(x), y(y)
+	{
+
+	}
 
 	template <class T1, class T2>
 	constexpr vec2d<T1>& operator+=(vec2d<T1>& v1, const vec2d<T2>& v2)
@@ -402,91 +496,91 @@ namespace def
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator+(const vec2d<T1>& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const vec2d<T1>& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1.x + v2.x, v1.y + v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator-(const vec2d<T1>& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const vec2d<T1>& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1.x - v2.x, v1.y - v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator*(const vec2d<T1>& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const vec2d<T1>& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1.x * v2.x, v1.y * v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator/(const vec2d<T1>& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const vec2d<T1>& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1.x / v2.x, v1.y / v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator%(const vec2d<T1>& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator%(const vec2d<T1>& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1.x % v2.x, v1.y % v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator+(const vec2d<T1>& v1, const T2& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const vec2d<T1>& v1, const T2& v2)
 	{
 		return vec2d(v1.x + v2, v1.y + v2);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator-(const vec2d<T1>& v1, const T2& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const vec2d<T1>& v1, const T2& v2)
 	{
 		return vec2d(v1.x - v2, v1.y - v2);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator*(const vec2d<T1>& v1, const T2& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const vec2d<T1>& v1, const T2& v2)
 	{
 		return vec2d(v1.x * v2, v1.y * v2);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator/(const vec2d<T1>& v1, const T2& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const vec2d<T1>& v1, const T2& v2)
 	{
 		return vec2d(v1.x / v2, v1.y / v2);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator+(const T1& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator+(const T1& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1 + v2.x, v1 + v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator-(const T1& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator-(const T1& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1 - v2.x, v1 - v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator*(const T1& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator*(const T1& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1 * v2.x, v1 * v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator/(const T1& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator/(const T1& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1 / v2.x, v1 / v2.y);
 	}
 
 	template <class T1, class T2>
-	constexpr auto operator%(const T1& v1, const vec2d<T2>& v2)
+	constexpr vec2d<decltype(T1(1) + T2(1))> operator%(const T1& v1, const vec2d<T2>& v2)
 	{
 		return vec2d(v1 % v2.x, v1 % v2.y);
 	}
 
 	template <class T>
-	constexpr auto operator-(const vec2d<T>& v)
+	constexpr vec2d<T> operator-(const vec2d<T>& v)
 	{
 		return vec2d(-v.x, -v.y);
 	}
@@ -656,7 +750,7 @@ namespace def
 	}
 
 	template <class T>
-	constexpr std::string vec2d<T>::str() const
+	std::string vec2d<T>::str() const
 	{
 		return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
 	}
@@ -857,14 +951,12 @@ namespace def
 	template<class T1, class T2>
 	constexpr bool contains(const circle<T1>& c, const rect<T2>& r)
 	{
-		auto radius_sqr = c.radius * c.radius;
+		auto radius2 = c.radius * c.radius;
 
 		auto check_dist = [&](const vec2d<T2>& edge)
 			{
-				auto diff_x = edge.x - c.pos.x;
-				auto diff_y = edge.y - c.pos.y;
-
-				return diff_x * diff_x + diff_y * diff_y <= radius_sqr;
+				const auto diff = edge - c.pos;
+				return diff.dot(diff) <= radius2;
 			};
 
 		return check_dist(r.pos) && check_dist(r.top_right()) && check_dist(r.bottom_left()) && check_dist(r.bottom_right());
@@ -886,9 +978,9 @@ namespace def
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r)
+	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r, side* s)
 	{
-		return intersects(r, p);
+		return intersects(r, p, s);
 	}
 
 	template<class T1, class T2>
@@ -907,42 +999,52 @@ namespace def
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p)
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p, side* s)
 	{
-		for (uint32_t i = 0; i < r.SIDES; i++)
+		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
 			if (contains(r.side(i), p))
+			{
+				if (s) *s = i;
 				return { p };
+			}
 		}
 
 		return {};
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2)
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<side>* s)
 	{
 		std::vector<vec2d<T2>> intersections;
 
-		for (uint32_t i = 0; i < r1.SIDES; i++)
+		for (uint8_t i = 0; i < r1.SIDES; i++)
 		{
 			line<T1> side = r1.side(i);
+			bool intersected = false;
 
-			for (uint32_t j = 0; j < r2.SIDES; j++)
+			for (uint8_t j = 0; j < r2.SIDES; j++)
 			{
 				auto points = intersects(side, r2.side(j));
 
 				if (!points.empty())
+				{
 					intersections.push_back(points[0]);
+					intersected = true;
+				}
 			}
+
+			if (intersected)
+				if (s) s->push_back(def::side(i));
 		}
 
 		return intersections;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c)
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c, std::vector<side>* s)
 	{
-		return intersects(c, r);
+		return intersects(c, r, s);
 	}
 
 	template<class T1, class T2>
@@ -977,9 +1079,9 @@ namespace def
 	}
 
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r)
+	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r, std::vector<side>* s)
 	{
-		return intersects(r, l);
+		return intersects(r, l, s);
 	}
 
 	template <class T1, class T2>
@@ -989,16 +1091,19 @@ namespace def
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l)
+	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l, std::vector<side>* s)
 	{
 		std::vector<vec2d<T2>> intersections;
 
-		for (uint32_t i = 0; i < r.SIDES; i++)
+		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
 			auto points = intersects(l, r.side(i));
 
 			if (!points.empty())
+			{
+				if (s) s->push_back(i);
 				intersections.push_back(points[0]);
+			}
 		}
 
 		return intersections;
@@ -1072,7 +1177,7 @@ namespace def
 		auto p2 = closestPointToLine - d.norm() * length;
 
 		std::vector<vec2d<T2>> intersections;
-		
+
 		if (contains(l, p1)) intersections.push_back(p1);
 		if (contains(l, p2)) intersections.push_back(p2);
 
@@ -1080,14 +1185,17 @@ namespace def
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r)
+	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r, std::vector<side>* s)
 	{
 		std::vector<vec2d<T2>> intersections;
 
-		for (size_t i = 0; i < rect<T2>::SIDES; i++)
+		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
 			for (const auto& p : intersects(c, r.side(i)))
+			{
+				if (s) s->push_back(i);
 				intersections.push_back(p);
+			}
 		}
 
 		return intersections;
