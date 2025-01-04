@@ -49,7 +49,7 @@
 
 namespace def
 {
-	constexpr double EPSILON = 0.01;
+	constexpr double EPSILON = 0.1;
 	constexpr double PI = 3.141592653589793;
 
 	namespace utils
@@ -235,10 +235,11 @@ namespace def
 
 	enum side : uint8_t
 	{
-		LEFT,
-		TOP,
-		RIGHT,
-		BOTTOM
+		SIDE_LEFT,
+		SIDE_TOP,
+		SIDE_RIGHT,
+		SIDE_BOTTOM,
+		SIDE_NONE
 	};
 
 	template <class T>
@@ -342,67 +343,67 @@ namespace def
 
 	// Checks if p1 and p2 have the same coordinates
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p1, const vec2d<T2>& p2);
+	constexpr bool intersects(const vec2d<T1>& p1, const vec2d<T2>& p2, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if p intersects l
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const line<T2>& l);
+	constexpr bool intersects(const vec2d<T1>& p, const line<T2>& l, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if p intersects r
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r, side* s = nullptr);
+	constexpr bool intersects(const vec2d<T1>& p, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, side* s = nullptr);
 
 	// Checks if p intersects circle
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const circle<T2>& c);
+	constexpr bool intersects(const vec2d<T1>& p, const circle<T2>& c, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if c intersects p
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const vec2d<T2>& p);
+	constexpr bool intersects(const circle<T1>& c, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if r intersects p
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p, side* s = nullptr);
+	constexpr bool intersects(const rect<T1>& r, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections, side* s = nullptr);
 
 	// Checks if r1 intersects r2
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<side>* s = nullptr);
+	constexpr bool intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
 	// Checks if r intersects c
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c, std::vector<side>* s = nullptr);
+	constexpr bool intersects(const rect<T1>& r, const circle<T2>& c, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
 	// Checks if l1 intersects l2
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l1, const line<T2>& l2);
+	constexpr bool intersects(const line<T1>& l1, const line<T2>& l2, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if l intersects r
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r);
+	constexpr bool intersects(const line<T1>& l, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
 	// Checks if l intersects c
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const circle<T2>& c);
+	constexpr bool intersects(const line<T1>& l, const circle<T2>& c, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if r intersects l
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l, std::vector<side>* s = nullptr);
+	constexpr bool intersects(const rect<T1>& r, const line<T2>& l, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
 	// Checks if l intersects p
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const vec2d<T2>& p);
+	constexpr bool intersects(const line<T1>& l, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if c1 intersects c2
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c1, const circle<T2>& c2);
+	constexpr bool intersects(const circle<T1>& c1, const circle<T2>& c2, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if c intersects l
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const line<T2>& l);
+	constexpr bool intersects(const circle<T1>& c, const line<T2>& l, std::vector<vec2d<T2>>& intersections);
 
 	// Checks if c intersects r
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r, std::vector<side>* s = nullptr);
+	constexpr bool intersects(const circle<T1>& c, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
 #define DEF_GEOMETRY2D_IMPL
 
@@ -833,10 +834,10 @@ namespace def
 	{
 		switch (i)
 		{
-		case side::LEFT: return left();
-		case side::TOP: return top();
-		case side::RIGHT: return right();
-		case side::BOTTOM: return bottom();
+		case SIDE_LEFT: return left();
+		case SIDE_TOP: return top();
+		case SIDE_RIGHT: return right();
+		case SIDE_BOTTOM: return bottom();
 		}
 
 		return {};
@@ -933,7 +934,7 @@ namespace def
 		vec2d<T2> proj = l.start.lerp(l.end, dp);
 
 		// We need to find a proper epsilon value
-		return p.dist(proj) < 1;
+		return p.dist(proj) < EPSILON;
 	}
 
 	template<class T1, class T2>
@@ -963,60 +964,67 @@ namespace def
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p1, const vec2d<T2>& p2)
+	constexpr bool intersects(const vec2d<T1>& p1, const vec2d<T2>& p2, std::vector<vec2d<T2>>& intersections)
 	{
 		if (contains(p1, p2))
-			return { p2 };
+		{
+			intersections.push_back(p2);
+			return true;
+		}
 
-		return {};
+		return false;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const line<T2>& l)
+	constexpr bool intersects(const vec2d<T1>& p, const line<T2>& l, std::vector<vec2d<T2>>& intersections)
 	{
-		return intersects(l, p);
+		return intersects(l, p, intersections);
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const rect<T2>& r, side* s)
+	constexpr bool intersects(const vec2d<T1>& p, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, side* s)
 	{
-		return intersects(r, p, s);
+		return intersects(r, p, intersections, s);
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const vec2d<T1>& p, const circle<T2>& c)
+	constexpr bool intersects(const vec2d<T1>& p, const circle<T2>& c, std::vector<vec2d<T2>>& intersections)
 	{
-		return intersects(c, p);
+		return intersects(c, p, intersections);
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const vec2d<T2>& p)
+	constexpr bool intersects(const circle<T1>& c, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections)
 	{
 		if (utils::equal((c.pos - p).mag2(), c.radius * c.radius))
-			return { p };
+		{
+			intersections.push_back(p);
+			return true;
+		}
 
-		return {};
+		return false;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const vec2d<T2>& p, side* s)
+	constexpr bool intersects(const rect<T1>& r, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections, side* s)
 	{
 		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
 			if (contains(r.side(i), p))
 			{
 				if (s) *s = i;
-				return { p };
+				intersections.push_back(p);
+				return true;
 			}
 		}
 
-		return {};
+		return false;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<side>* s)
+	constexpr bool intersects(const rect<T1>& r1, const rect<T2>& r2, std::vector<vec2d<T2>>& intersections, std::vector<side>* s)
 	{
-		std::vector<vec2d<T2>> intersections;
+		intersections.clear();
 
 		for (uint8_t i = 0; i < r1.SIDES; i++)
 		{
@@ -1025,7 +1033,8 @@ namespace def
 
 			for (uint8_t j = 0; j < r2.SIDES; j++)
 			{
-				auto points = intersects(side, r2.side(j));
+				std::vector<vec2d<T2>> points;
+				intersects(side, r2.side(j), points);
 
 				if (!points.empty())
 				{
@@ -1038,66 +1047,74 @@ namespace def
 				if (s) s->push_back(def::side(i));
 		}
 
-		return intersections;
+		return !intersections.empty();
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const circle<T2>& c, std::vector<side>* s)
+	constexpr bool intersects(const rect<T1>& r, const circle<T2>& c, std::vector<vec2d<T2>>& intersections, std::vector<side>* s)
 	{
-		return intersects(c, r, s);
+		return intersects(c, r, intersections, s);
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l1, const line<T2>& l2)
+	constexpr bool intersects(const line<T1>& l1, const line<T2>& l2, std::vector<vec2d<T2>>& intersections)
 	{
 		// l1: a1 * x + b1 * y = -c1
 		// l2: a2 * x + b2 * y = -c2
 
-		auto a1 = l1.start.y - l1.end.y;
-		auto b1 = l1.end.x - l1.start.x;
+		const auto a1 = l1.start.y - l1.end.y;
+		const auto b1 = l1.end.x - l1.start.x;
 
-		auto a2 = l2.start.y - l2.end.y;
-		auto b2 = l2.end.x - l2.start.x;
+		const auto a2 = l2.start.y - l2.end.y;
+		const auto b2 = l2.end.x - l2.start.x;
 
-		auto det = a1 * b2 - b1 * a2;
+		const auto det = a1 * b2 - b1 * a2;
 
 		if (det == 0)
 		{
-			// Determinant is 0 so there are no intersection points and lines are parallel
-			return {};
+			// Determinant is 0 so the lines are collinear
+
+			// one line is inside another line so there are infinite
+			// number of solutions or no solutions at all
+			return contains(l2, l1.start) || contains(l1, l2.start);
 		}
 
-		auto c1 = l1.start.x * l1.end.y - l1.end.x * l1.start.y;
-		auto c2 = l2.start.x * l2.end.y - l2.end.x * l2.start.y;
+		const auto c1 = l1.start.x * l1.end.y - l1.end.x * l1.start.y;
+		const auto c2 = l2.start.x * l2.end.y - l2.end.x * l2.start.y;
 
-		vec2d<T2> point = { (b1 * c2 - b2 * c1) / det, (a2 * c1 - a1 * c2) / det };
+		const vec2d<T2> point = { (b1 * c2 - b2 * c1) / det, (a2 * c1 - a1 * c2) / det };
 
 		if (contains(l1, point) && contains(l2, point))
-			return { point };
+		{
+			intersections.resize(1);
+			intersections[0] = point;
+			return true;
+		}
 
-		return {};
+		return false;
 	}
 
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const rect<T2>& r, std::vector<side>* s)
+	constexpr bool intersects(const line<T1>& l, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, std::vector<side>* s)
 	{
-		return intersects(r, l, s);
+		return intersects(r, l, intersections, s);
 	}
 
 	template <class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const circle<T2>& c)
+	constexpr bool intersects(const line<T1>& l, const circle<T2>& c, std::vector<vec2d<T2>>& intersections)
 	{
-		return intersects(c, l);
+		return intersects(c, l, intersections);
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const rect<T1>& r, const line<T2>& l, std::vector<side>* s)
+	constexpr bool intersects(const rect<T1>& r, const line<T2>& l, std::vector<vec2d<T2>>& intersections, std::vector<side>* s)
 	{
-		std::vector<vec2d<T2>> intersections;
+		intersections.clear();
 
 		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
-			auto points = intersects(l, r.side(i));
+			std::vector<vec2d<T1>> points;
+			intersects(l, r.side(i), points);
 
 			if (!points.empty())
 			{
@@ -1106,32 +1123,37 @@ namespace def
 			}
 		}
 
-		return intersections;
+		return !intersections.empty();
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const line<T1>& l, const vec2d<T2>& p)
+	constexpr bool intersects(const line<T1>& l, const vec2d<T2>& p, std::vector<vec2d<T2>>& intersections)
 	{
 		if (contains(l, p))
-			return { p };
+		{
+			intersections.push_back(p);
+			return true;
+		}
 
-		return {};
+		return false;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c1, const circle<T2>& c2)
+	constexpr bool intersects(const circle<T1>& c1, const circle<T2>& c2, std::vector<vec2d<T2>>& intersections)
 	{
-		auto sqr_r1 = c1.radius * c1.radius;
-		auto sqr_r2 = c2.radius * c2.radius;
+		intersections.clear();
 
-		auto dist = c1.pos.dist(c2.pos);
-		auto adj = (sqr_r1 - sqr_r2 + dist * dist) / (2 * dist);
-		auto sqr_hyp = sqr_r1 - adj * adj;
+		const auto sqr_r1 = c1.radius * c1.radius;
+		const auto sqr_r2 = c2.radius * c2.radius;
+
+		const auto dist = c1.pos.dist(c2.pos);
+		const auto adj = (sqr_r1 - sqr_r2 + dist * dist) / (2 * dist);
+		const auto sqr_hyp = sqr_r1 - adj * adj;
 
 		if (sqr_hyp < 0)
-			return {};
+			return false;
 
-		auto hyp = sqrt(sqr_hyp);
+		const auto hyp = sqrt(sqr_hyp);
 
 		vec2d<T2> p = (c2.pos - c1.pos) * (adj / dist) + c1.pos;
 		vec2d<T2> inter1, inter2;
@@ -1142,52 +1164,55 @@ namespace def
 		inter2.x = p.x - hyp * (c2.pos.y - c1.pos.y) / dist;
 		inter2.y = p.y + hyp * (c2.pos.x - c1.pos.x) / dist;
 
-		if (inter1 == inter2)
-			return { inter1 };
+		intersections.push_back(inter1);
 
-		return { inter1, inter2 };
+		if (!utils::equal(inter1, inter2))
+			intersections.push_back(inter2);
+
+		return true;
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const line<T2>& l)
+	constexpr bool intersects(const circle<T1>& c, const line<T2>& l, std::vector<vec2d<T2>>& intersections)
 	{
-		auto dist = l.dist(c.pos);
+		intersections.clear();
+
+		const auto dist = l.dist(c.pos);
 
 		if (utils::equal(dist, c.radius))
 		{
 			// No intersection at all
-			return {};
+			return false;
 		}
 
 		// Compute point closest to the circle on the line
-		auto d = l.vector();
-		auto uLine = d.dot(c.pos - l.start) / d.mag2();
-		auto closestPointToLine = l.start + uLine * d;
-		auto distToLine = (c.pos - closestPointToLine).mag2();
+		const auto d = l.vector();
+		const auto uLine = d.dot(c.pos - l.start) / d.mag2();
+		const auto closestPointToLine = l.start + uLine * d;
+		const auto distToLine = (c.pos - closestPointToLine).mag2();
 
 		if (utils::equal(distToLine, c.radius * c.radius))
 		{
 			// Only one intersection point
-			return { closestPointToLine };
+			intersections.push_back(closestPointToLine);
+			return true;
 		}
 
 		// Circle intersects the line
-		auto length = sqrt(c.radius * c.radius - distToLine);
-		auto p1 = closestPointToLine + d.norm() * length;
-		auto p2 = closestPointToLine - d.norm() * length;
-
-		std::vector<vec2d<T2>> intersections;
+		const auto length = sqrt(c.radius * c.radius - distToLine);
+		const auto p1 = closestPointToLine + d.norm() * length;
+		const auto p2 = closestPointToLine - d.norm() * length;
 
 		if (contains(l, p1)) intersections.push_back(p1);
 		if (contains(l, p2)) intersections.push_back(p2);
 
-		return intersections;
+		return !intersections.empty();
 	}
 
 	template<class T1, class T2>
-	constexpr std::vector<vec2d<T2>> intersects(const circle<T1>& c, const rect<T2>& r, std::vector<side>* s)
+	constexpr bool intersects(const circle<T1>& c, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, std::vector<side>* s)
 	{
-		std::vector<vec2d<T2>> intersections;
+		intersections.clear();
 
 		for (uint8_t i = 0; i < r.SIDES; i++)
 		{
@@ -1198,7 +1223,7 @@ namespace def
 			}
 		}
 
-		return intersections;
+		return !intersections.empty();
 	}
 
 	template<class T>
