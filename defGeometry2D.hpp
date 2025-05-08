@@ -43,10 +43,6 @@
 #include <algorithm>
 #include <cstdint>
 
-#ifndef DGE_IGNORE_VEC2D
-#define DGE_IGNORE_VEC2D
-#endif
-
 namespace def
 {
 	constexpr double EPSILON = 0.1;
@@ -268,6 +264,10 @@ namespace def
 
 		static constexpr uint8_t SIDES = 4;
 	};
+
+	using recti = rect<int>;
+	using rectf = rect<float>;
+	using rectd = rect<double>;
 
 	// point contains point
 	// rectangle contains point
