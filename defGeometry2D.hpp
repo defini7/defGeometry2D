@@ -1,40 +1,33 @@
 #ifndef DEF_GEOMETRY2D_HPP
 #define DEF_GEOMETRY2D_HPP
 
-#pragma region Documentation
-/***
-* - Constants
-*     - EPSILON - is used for comparing floating point values
-*     - PI - is just the Pi number stolen from the Internet (just kidding... I calculated it myself)
-* - Functions
-*     - utils::equal - checks if difference between 2 values is less than or equals to the EPSILON constant
-*                      (values must have *-* and *<=* operators implemented)
-* - Structs
-*     - vec2d<T> - a struct for storing *x* and *y* components of type T
-*         - Methods:
-*             - vec2d::clamp - clamps each component to the *start* and *end*
-*             - vec2d::lerp - lineally interpolates each component between *start* and *end*
-*             - vec2d::dist - calculates distance between *this* and *v* points
-*             - vec2d::dot - calculates dot product of *this* and *v* vectors
-*             - vec2d::cross - calculates cross product of *this* and *v* vectors
-*             - vec2d::angle - calculates angle between *this* and *v* using dot product
-*             - vec2d::length - calculates a length of the vector
-*             - vec2d::mag - calculates a length of the vector
-*             - vec2d::mag2 - calculates a square root out of the vec2d::mag value
-*             - vec2d::man - calculates Manhattan distance between *this* and *v* points
-*             - vec2d::max - performs std::max function on each component of *this* with the *v* components
-*             - vec2d::min - performs std::min function on each component of *this* with the *v* components
-*             - vec2d::swap - swaps components of *this* and *v* vectors
-*             - vec2d::norm - returns *v* / *v.length()*
-*             - vec2d::abs - performs std::abs on each component of the vector
-*             - vec2d::perp - returns a perpendicular vector to the *this* vector
-*             - vec2d::floor - performs std::floor on each component of the vector
-*             - vec2d::ceil - performs std::ceil on each component of the vector
-*             - vec2d::round - performs std::round on each component of the vector
-*             - vec2d::cart - treats *x* as a radius and *y* as an angle and returns a vector where *x* and *y* are points in the cartesian space
-*             - vec2d::polar - returns a vector where "x" component is a length of the *this* vector and "y" is the angle between (length, 0) and (x, y) points
-*             - vec2d::str - returns *x* and *y* components as a string: "(x, y)"
-***/
+#pragma region General
+/*
+    defGeometry2D.hpp
+    
+    +---------------------------------------+
+    |             defGeometry2D             |
+	| Handling collisions in different ways |
+    +---------------------------------------+
+    
+    
+    Distributed under GPL3 license
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                    GNU GENERAL PUBLIC LICENSE
+                      Version 3, 29 June 2007
+     
+    Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+    Everyone is permitted to copy and distribute verbatim copies
+    of this license document, but changing it is not allowed.
+    
+
+    Author
+    ~~~~~~
+
+    Alex, aka defini7, Copyright (C) 2024-2025
+    
+*/
 #pragma endregion
 
 #include <vector>
@@ -61,6 +54,7 @@ namespace def
 
 		constexpr vec2d() = default;
 		constexpr vec2d(const T& x, const T& y);
+		constexpr vec2d(const T& xy);
 
 		constexpr vec2d(const vec2d&) = default;
 		constexpr vec2d& operator=(const vec2d&) = default;
@@ -405,13 +399,17 @@ namespace def
 	template <class T1, class T2>
 	constexpr bool intersects(const circle<T1>& c, const rect<T2>& r, std::vector<vec2d<T2>>& intersections, std::vector<side>* s = nullptr);
 
-#define DEF_GEOMETRY2D_IMPL
-
 #ifdef DEF_GEOMETRY2D_IMPL
 #undef DEF_GEOMETRY2D_IMPL
 
 	template <class T>
 	constexpr vec2d<T>::vec2d(const T& x, const T& y) : x(x), y(y)
+	{
+
+	}
+
+	template <class T>
+	constexpr vec2d<T>::vec2d(const T& xy) : x(xy), y(xy)
 	{
 
 	}
